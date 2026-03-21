@@ -35,9 +35,6 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/Favicon.png">
 
-    <!-- Vercel Web Analytics -->
-    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
-
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
     {
@@ -538,7 +535,8 @@
             transform-style: preserve-3d;
         }
 
-        .service-card:hover .service-card-inner {
+        .service-card:hover .service-card-inner,
+        .service-card.flipped .service-card-inner {
             transform: rotateY(180deg);
         }
 
@@ -2321,7 +2319,7 @@
                 showImage(next);
             }
 
-            // Auto-play when hovering over card
+            // Auto-play when hovering over card (desktop)
             card.addEventListener('mouseenter', () => {
                 showImage(0);
                 intervalId = setInterval(nextImage, 1500);
@@ -2329,6 +2327,24 @@
 
             card.addEventListener('mouseleave', () => {
                 clearInterval(intervalId);
+            });
+
+            // Touch support for iOS/mobile
+            let touchTimeout;
+            card.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                card.classList.add('flipped');
+                showImage(0);
+                intervalId = setInterval(nextImage, 1500);
+                // Stop after 6 seconds
+                touchTimeout = setTimeout(() => {
+                    clearInterval(intervalId);
+                    card.classList.remove('flipped');
+                }, 6000);
+            }, { passive: false });
+
+            card.addEventListener('touchend', () => {
+                // Optional: stop on touch end, or let the timeout handle it
             });
 
             // Click on dots
