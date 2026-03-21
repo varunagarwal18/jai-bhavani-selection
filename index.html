@@ -213,6 +213,7 @@
             height: 200%;
             background: rgba(255,255,255,0.03);
             transform: rotate(15deg);
+            pointer-events: none;
         }
 
         .hero-container {
@@ -223,6 +224,11 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-content h1 {
@@ -441,21 +447,6 @@
             gap: 30px;
         }
 
-        .service-card {
-            background: var(--bg-light);
-            padding: 40px 30px;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,180,216,0.15);
-        }
-
         .service-icon {
             width: 80px;
             height: 80px;
@@ -493,17 +484,160 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 40px 30px;
+            height: auto;
+            min-height: 320px;
+            border-radius: 20px;
+            cursor: default;
+        }
+
+        .service-cta:hover {
+            transform: none;
+            box-shadow: 0 20px 40px rgba(0,180,216,0.3);
         }
 
         .service-cta h3 {
             color: var(--white);
             font-size: 24px;
             margin-bottom: 10px;
+            text-align: center;
         }
 
         .service-cta p {
             color: rgba(255,255,255,0.9);
             margin-bottom: 25px;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        /* Flip Card Styles */
+        .service-card {
+            background: transparent;
+            perspective: 1000px;
+            height: 420px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: none;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .service-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .service-card:hover .service-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .service-card-front, .service-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+        }
+
+        .service-card-front {
+            background: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid transparent;
+            padding: 30px;
+        }
+
+        .service-card-front .service-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            flex-shrink: 0;
+        }
+
+        .service-card-front .service-icon i {
+            font-size: 32px;
+        }
+
+        .service-card-front h3 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .service-card-front p {
+            color: var(--text-light);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .service-card-back {
+            background: var(--white);
+            transform: rotateY(180deg);
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card-back .image-slider {
+            width: 100%;
+            height: 85%;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .service-card-back .image-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #f5f5f5;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .service-card-back .image-slider img.active {
+            opacity: 1;
+        }
+
+        .service-card-back .image-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            height: 15%;
+            align-items: center;
+        }
+
+        .service-card-back .image-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .service-card-back .image-dots span.active {
+            background: var(--accent);
         }
 
         .btn-white {
@@ -1259,7 +1393,14 @@
             }
 
             .hero-container {
+                grid-template-columns: 1fr;
                 gap: 40px;
+            }
+
+            .hero-content {
+                order: 2;
+                position: relative;
+                z-index: 2;
             }
 
             .hero-content h1 {
@@ -1289,11 +1430,16 @@
 
             .hero-image {
                 order: -1;
+                position: relative;
+                z-index: 1;
             }
 
             .hero-image img {
+                width: 100%;
                 border-radius: 15px;
                 height: 300px;
+                max-height: 300px;
+                object-fit: contain;
             }
 
             .hero-badge {
@@ -1373,7 +1519,7 @@
             }
 
             .service-card {
-                padding: 30px 25px;
+                height: 400px;
             }
 
             .service-icon {
@@ -1744,48 +1890,136 @@
             </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-building"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <h3>Corporate Uniforms</h3>
+                            <p>Professional attire including suits, blazers, shirts, and formal wear tailored for your corporate identity.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/corporate1.png" alt="Corporate Uniforms" class="active">
+                                <img src="images/products/corporate2.png" alt="Corporate Uniforms">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                                <span></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Corporate Uniforms</h3>
-                    <p>Professional attire including suits, blazers, shirts, and formal wear tailored for your corporate identity.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-hospital"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-hospital"></i>
+                            </div>
+                            <h3>Hospital Scrubs</h3>
+                            <p>Medical-grade scrubs, lab coats, bedsheets and nursing uniforms designed for comfort and hygiene standards.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/hospital1.png" alt="Hospital Scrubs" class="active">
+                                <img src="images/products/hospital2.png" alt="Hospital Scrubs">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                                <span></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Hospital Scrubs</h3>
-                    <p>Medical-grade scrubs, lab coats, bedsheets and nursing uniforms designed for comfort and hygiene standards.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-pills"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <h3>Pharma Workwear</h3>
+                            <p>Specialized cleanroom suits, PPE kits, factory uniforms, and protective clothing for pharmaceutical facilities.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/pharma.png" alt="Pharma Workwear" class="active">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Pharma Workwear</h3>
-                    <p>Specialized cleanroom suits, PPE kits, factory uniforms, and protective clothing for pharmaceutical facilities.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-concierge-bell"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-concierge-bell"></i>
+                            </div>
+                            <h3>Hospitality Attire</h3>
+                            <p>Elegant uniforms for hotels, restaurants, and resorts including chef coats, front desk, and service staff.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/hotel1.png" alt="Hospitality Attire" class="active">
+                                <img src="images/products/hotel2.png" alt="Hospitality Attire">
+                                <img src="images/products/hotel3.png" alt="Hospitality Attire">
+                                <img src="images/products/hotel4.png" alt="Hospitality Attire">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Hospitality Attire</h3>
-                    <p>Elegant uniforms for hotels, restaurants, and resorts including chef coats, front desk, and service staff.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-industry"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <h3>Industrial Safety</h3>
+                            <p>High-visibility vests, coveralls, and safety gear meeting industrial protection standards.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/industry.png" alt="Industrial Safety" class="active">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Industrial Safety</h3>
-                    <p>High-visibility vests, coveralls, and safety gear meeting industrial protection standards.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-users-cog"></i>
+                    <div class="service-card-inner">
+                        <div class="service-card-front">
+                            <div class="service-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <h3>Staff Uniforms</h3>
+                            <p>Complete uniform solutions for watchmen, drivers, housekeeping staff, and all support personnel.</p>
+                        </div>
+                        <div class="service-card-back">
+                            <div class="image-slider">
+                                <img src="images/products/staff1.png" alt="Staff Uniforms" class="active">
+                                <img src="images/products/staff2.png" alt="Staff Uniforms">
+                                <img src="images/products/staff3.png" alt="Staff Uniforms">
+                                <img src="images/products/staff4.png" alt="Staff Uniforms">
+                            </div>
+                            <div class="image-dots">
+                                <span class="active"></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
                     </div>
-                    <h3>Staff Uniforms</h3>
-                    <p>Complete uniform solutions for watchmen, drivers, housekeeping staff, and all support personnel.</p>
                 </div>
-                <div class="service-cta service-card">
+                <div class="service-cta">
                     <h3>Need Custom Uniforms?</h3>
                     <p>Get a personalized quote for your organization's specific requirements</p>
                     <a href="#contact" class="btn-white">Contact Us Now</a>
@@ -1890,7 +2124,7 @@
         <div class="container">
             <div class="process-grid">
                 <div class="process-image">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=500&fit=crop" alt="Our Process">
+                    <img src="images/Apparel-Manufacturing-Process.jpg" alt="Our Process">
                 </div>
                 <div class="process-content">
                     <div class="section-header" style="text-align: left; margin-bottom: 40px;">
@@ -2059,6 +2293,52 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
+        // Service Card Image Slider
+        const serviceSliders = document.querySelectorAll('.service-card');
+
+        serviceSliders.forEach((card, cardIndex) => {
+            const slider = card.querySelector('.image-slider');
+            if (!slider) return;
+
+            const images = slider.querySelectorAll('img');
+            const dots = card.querySelectorAll('.image-dots span');
+            let currentIndex = 0;
+            let intervalId;
+
+            function showImage(index) {
+                images.forEach(img => img.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                images[index].classList.add('active');
+                dots[index].classList.add('active');
+                currentIndex = index;
+            }
+
+            function nextImage() {
+                const next = (currentIndex + 1) % images.length;
+                showImage(next);
+            }
+
+            // Auto-play when hovering over card
+            card.addEventListener('mouseenter', () => {
+                showImage(0);
+                intervalId = setInterval(nextImage, 1500);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                clearInterval(intervalId);
+            });
+
+            // Click on dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    clearInterval(intervalId);
+                    showImage(index);
+                    intervalId = setInterval(nextImage, 1500);
+                });
+            });
+        });
+
         // Initialize EmailJS with your Public Key
         emailjs.init('ycjw8Nij7_7ghNio2');
 
